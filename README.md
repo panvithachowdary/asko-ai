@@ -1,83 +1,64 @@
 # Asko AI
 
-Asko AI is a full-stack conversational web application that allows users to ask a question and receive an AI-generated response instantly. The system is designed around a simple interaction model where each request produces a single response.
+Asko AI is a full-stack conversational web application that allows users to submit a single query and receive a structured AI-generated response instantly.
+
+The system follows a strict one-question → one-response interaction model, focusing on clarity, performance, and clean architecture.
 
 ---
 
+## Live Deployment
+
+Frontend: https://asko-ai-8bpp.vercel.app  
+Backend: https://asko-ai.vercel.app  
+
+---
 
 ## Overview
 
-The application demonstrates complete integration of a modern frontend, backend, AI service, and database. A user submits a query through the interface, the backend processes it using an AI model, and the response is returned and displayed while also being stored for persistence.
+This project demonstrates end-to-end integration of a modern web application stack, combining frontend UI, backend logic, AI processing, and database storage.
+
+Workflow:
+
+1. User submits a question through the frontend
+2. Backend validates the request
+3. Groq API generates a response using the AI model
+4. Response is returned to the frontend
+5. Question and response are stored in MongoDB Atlas
 
 ---
 
 ## Features
 
-* One question per request with a single AI-generated response
-* Integration with Groq API (LLaMA 3.1 8B Instant model)
-* Clean and focused user interface
-* Backend validation and structured API handling
-* Storage of queries and responses in MongoDB Atlas
-* Independent deployment of frontend and backend
+- Single-query interaction model (no chat history)
+- Fast AI response using LLaMA 3.1 8B Instant model
+- Clean and focused user interface
+- Backend validation and error handling
+- Persistent storage of queries and responses
+- Independent deployment of frontend and backend
 
 ---
 
 ## Tech Stack
 
-**Frontend**
+### Frontend
+- React (Vite)
+- JavaScript
+- CSS
 
-* React (Vite)
-* JavaScript
-* CSS
+### Backend
+- Node.js
+- Express.js
 
-**Backend**
+### Database
+- MongoDB Atlas
 
-* Node.js
-* Express.js
+### AI Integration
+- Groq API  
+- Model: llama-3.1-8b-instant
 
-**Database**
-
-* MongoDB Atlas
-
-**AI Integration**
-
-* Groq API
-* Model: llama-3.1-8b-instant
-
-**Deployment**
-
-* Vercel
+### Deployment
+- Vercel (separate deployments for frontend and backend)
 
 ---
 
 ## Project Structure
-
-```id="6y2jcf"
-asko-ai/
-│
-├── frontend/
-│   ├── src/
-│   └── ...
-│
-├── backend/
-│   ├── config/
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   └── index.js
-│
-├── README.md
-└── vibecoded.md
-```
-
----
-
-## Design Decisions
-
-The application intentionally avoids maintaining chat history to align with the requirement of processing a single query at a time. The separation of frontend and backend ensures modularity and simplifies deployment. Environment variables are used to securely manage sensitive configuration such as API keys and database credentials.
-
----
-
-## Author
-
-Panvitha Chowdary
