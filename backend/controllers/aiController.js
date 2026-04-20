@@ -1,5 +1,6 @@
+import dotenv from "dotenv";
 import Groq from "groq-sdk";
-import Query from "../models/queryModel.js";
+import Query from "../models/Query.js";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
