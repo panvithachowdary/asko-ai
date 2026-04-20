@@ -1,75 +1,60 @@
-import dotenv from "dotenv";
 import Groq from "groq-sdk";
-import Query from "../models/Query.js";
+import Query from "../models/queryModel.js";
 
-dotenv.config();
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY
+});
 
 export const askAI = async (req, res) => {
   try {
-    const { question } = req.body || {};
+    const { question } = req.body;
 
-    if (!question || !question.trim()) {
+    if (!question) {
       return res.status(400).json({
         success: false,
         message: "Question is required"
       });
     }
 
-    const groq = new Groq({
-      apiKey: process.env.GROQ_API_KEY
-    });
-
     const completion = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant",
       messages: [
-        {
-          role: "system",
-          content: `
-You are a professional AI assistant.
-
-Rules:
-- Answer only the current question
-- Do not maintain conversation memory
-- Format responses in clean markdown
-- Use short headings when useful
-- Use bullet points for clarity
-- Keep answers polished and professional
-- Avoid raw text dumps
-- Keep the structure readable in a web app UI
-          `
-        },
         {
           role: "user",
           content: question
         }
       ],
-      temperature: 0.7,
-      max_tokens: 700
+      model: "llama-3.1-8b-instant"
     });
 
     const aiResponse =
-      completion.choices?.[0]?.message?.content || "No response generated.";
+      completion?.choices?.[0]?.message?.content || "No response";
 
-    const savedQuery = await Query.create({
-      question,
-      response: aiResponse
-    });
+    let savedQuery = null;
+
+    try {
+      savedQuery = await Query.create({
+        question,
+        response: aiResponse
+      });
+    } catch (dbError) {
+      console.error("MongoDB Save Error:", dbError.message);
+    }
 
     res.status(200).json({
       success: true,
       data: {
-        id: savedQuery._id,
-        question: savedQuery.question,
-        response: savedQuery.response,
-        createdAt: savedQuery.createdAt
+        id: savedQuery?._id || null,
+        question,
+        response: aiResponse,
+        createdAt: savedQuery?.createdAt || new Date()
       }
     });
   } catch (error) {
-    console.error("AI Controller Error:", error);
+    console.error("AI Controller Error:", error.message);
 
     res.status(500).json({
       success: false,
-      message: "Server error while generating AI response"
+      message: error.message || "Server error while generating AI response"
     });
   }
 };
