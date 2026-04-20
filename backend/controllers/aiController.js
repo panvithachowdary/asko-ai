@@ -6,7 +6,7 @@ dotenv.config();
 
 export const askAI = async (req, res) => {
   try {
-    const { question } = req.body;
+    const { question } = req.body || {};
 
     if (!question || !question.trim()) {
       return res.status(400).json({
