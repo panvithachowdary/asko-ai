@@ -24,7 +24,19 @@ export const askAI = async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "You are a helpful AI assistant. Answer clearly and concisely."
+          content: `
+You are a professional AI assistant.
+
+Rules:
+- Answer only the current question
+- Do not maintain conversation memory
+- Format responses in clean markdown
+- Use short headings when useful
+- Use bullet points for clarity
+- Keep answers polished and professional
+- Avoid raw text dumps
+- Keep the structure readable in a web app UI
+          `
         },
         {
           role: "user",
@@ -32,7 +44,7 @@ export const askAI = async (req, res) => {
         }
       ],
       temperature: 0.7,
-      max_tokens: 500
+      max_tokens: 700
     });
 
     const aiResponse =
