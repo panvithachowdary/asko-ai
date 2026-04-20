@@ -1,9 +1,8 @@
+import dotenv from "dotenv";
 import Groq from "groq-sdk";
 import Query from "../models/Query.js";
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY
-});
+dotenv.config();
 
 export const askAI = async (req, res) => {
   try {
@@ -15,6 +14,10 @@ export const askAI = async (req, res) => {
         message: "Question is required"
       });
     }
+
+    const groq = new Groq({
+      apiKey: process.env.GROQ_API_KEY
+    });
 
     const completion = await groq.chat.completions.create({
       model: "llama-3.1-8b-instant",
